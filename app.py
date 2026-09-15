@@ -1,39 +1,57 @@
-from flask import Flask
+import requests
 
-app = Flask(__name__)
+location = input("Enter your location: ")
 
-@app.route("/")
-def home():
-    return """
-    <html>
-    <head>
-        <title>Weather Trend Analyzer</title>
-    </head>
+geo_url = "https://geocoding-api.open-meteo.com/v1/search"
 
-    <boby>
+geo_params = {
+    "name": location,
+    "count": 1,
+    "language": "en",
+    "format": "json"
+}
 
-        <h1>Real-Time Weather Trend Analyzer</h1>
+geo_response = requests.get(geo_url, params=geo_params)
+geo_data = geo_response.json()
 
-        <h3>Weather Data Collection</h3>
-        <p>Real-time weather data collection is completed.</p>
+if "results" not in geo_data:
+    print("Location not found.")
 
-        <h3>Data Quality Check</h3>
-        <p>Weather data quality check is completed.</p>
+else:
+    place = geo_data["results"][0]["name"]
+    country = geo_data["results"][0]["country"]
+    latitude = geo_data["results"][0]["latitude"]
+    longitude = geo_data["results"][0]["longitude"]
 
-        <h3>Data Preparation</h3>
-        <p>Weather data preparation is completed.</p>
+    weather_url = "https://api.open-meteo.com/v1/forecast"
 
-        <h3>Weather Change Analysis</h3>
-        <p>Weather change and trend analysis is completed.</p>
+    weather_params = {
+        "latitude": latitude,
+        "longitude": longitude,
+        "current": "temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation",
+        "timezone": "auto"
+    }
 
-        <h3>DevOps Status</h3>
-        <p>DevOps cloud deployment is working successfully.</p>
+    weather_response = requests.get(
+        weather_url,
+        params=weather_params
+    )
 
-        <h2>Status: SUCCESS</h2>
+    weather_data = weather_response.json()
 
-    </body>
-    </html>
-    """
+    if "current" not in weather_data:
+        print("Weather data could not be collected.")
+        print(weather_data)
+        exit()
+    current = weather_data["current"]
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+    print("\n--------------------------------------")
+    print("REAL-TIME WEATHER INFORMATION")
+    print("----------------------------------------")
+    print("Location:", place)
+    print("Country:", country)
+    print("Temperature:", current["temperature_2m"], "C")
+    print("Humidity:", current["relative_humidity_2m"], "%")
+    print("Wind Speed:", current["wind_speed_10m"], "km/h")
+    print("Precipitation:", current["precipitation"], "mm")
+    print("-----------------------------------------")
