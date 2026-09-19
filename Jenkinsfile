@@ -15,9 +15,9 @@ pipeline {
             }
         }
 
-        stage('Run Application') {
+        stage('Test Application') {
             steps {
-                echo 'Deployment stage completed'
+                bat 'python -m py_compile App.py'
             }
 
 
