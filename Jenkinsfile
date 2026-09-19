@@ -11,13 +11,13 @@ pipeline {
 
         stage('Install Requirements') {
             steps {
-                bat 'python -m pip install -r Requirement.txt'
+                bat 'C:\\Users\\PC\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe -m pip install -r Requirements.txt'
             }
         }
 
         stage('Test Application') {
             steps {
-                bat 'python -m py_compile App.py'
+                bat 'C:\\Users\\PC\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe -m py_compile App.py'
             }
 
 
