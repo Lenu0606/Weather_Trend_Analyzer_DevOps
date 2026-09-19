@@ -3,7 +3,7 @@ pipeline {
 
     stages {
 
-        stage('Get code') {
+        stage('Get Code') {
             steps {
                 echo 'Getting project code'
             }
