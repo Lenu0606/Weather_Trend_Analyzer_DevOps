@@ -3,7 +3,7 @@ pipeline {
 
     stages {
 
-        stages('Get Code') {
+        stage('Get code') {
             steps {
                 echo 'Getting project code'
             }
@@ -21,6 +21,12 @@ pipeline {
             }
 
 
+        }
+
+        stage('Deployment Check') {
+            steps {
+                echo 'Deployment  stage completed'
+            }
         }
     }
 
